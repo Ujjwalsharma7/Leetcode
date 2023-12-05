@@ -5,25 +5,21 @@ using namespace std;
 // } Driver Code Ends
 class Solution {
 private:
-bool check(int start, int V,vector<int>adj[],int color[] ){
-    queue<int> q;
-    q.push(start);
-    color[start]=0;
+bool check(int start,int col, int V,vector<int>adj[],int color[] ){
+    color[start]=col;
     
-    while(!q.empty()){
-        int node = q.front();
-        q.pop();
-        
-        for(auto it: adj[node]){
-            if(color[it] == -1){
-                color[it] = !color[node];
-                q.push(it);
-            }else if(color[it] == color[node]){
+    for(auto it : adj[start]){
+        if(color[it] == -1){
+            if(check(it,!col,V,adj,color) == false)
                 return false;
-            }
+        }else if(color[it] == color[start]){
+            return false;
         }
     }
+    
     return true;
+    
+   
 }
 public:
 	bool isBipartite(int V, vector<int>adj[]){
@@ -33,7 +29,7 @@ public:
 	    
 	    for(int i = 0; i<V; i++){
 	        if(color[i] == -1){
-	            if(check(i,V,adj,color) == false)
+	            if(check(i,0,V,adj,color) == false)
 	                return 0;
 	        }
 	    }
